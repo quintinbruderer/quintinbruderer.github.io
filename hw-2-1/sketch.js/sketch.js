@@ -41,10 +41,12 @@ function draw() {
   triangle(345, 10, 380, 20, 390, 95);
   triangle(855, 10, 810, 20, 800, 95);
   
-  //tail shadow
-  line(770, 520, 870, 460);
+  //tail and shadow
+  strokeWeight(2);
   line(870, 460, 780, 400);
-  line(780, 400, 900, 380);
   line(900, 380, 930, 270);
   line(930, 270, 820, 290)
+  strokeWeight(8);
+  line(770, 520, 870, 460);
+  line(780, 400, 900, 380);
 }
