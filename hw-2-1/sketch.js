@@ -2,6 +2,7 @@ function setup() {
   createCanvas(1000,2000);
   background(color(0,180, 200));
 }
+//hi friends
 
 function draw() {
     strokeWeight (1);
