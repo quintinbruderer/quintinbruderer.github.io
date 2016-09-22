@@ -1,4 +1,5 @@
 var bulge = 0;
+mouseX = mouseX/1200;
 
 
 function setup() {
