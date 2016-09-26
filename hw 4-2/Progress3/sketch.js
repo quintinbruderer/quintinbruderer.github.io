@@ -16,10 +16,11 @@ createCanvas(1200,800);
 function draw() {
   background(0);
   noFill();
+  
   //button progamming
   if(mouseX<=width/2+40 && mouseX>= width/2-40 && mouseY<=height/2+40  && mouseY>=height/2-40){
-    if(mouseIsPressed)
-    {fill(255,255,0);
+    if(mouseIsPressed) {
+    fill(255,255,0);
     background(180);
    //how to change font color?
     textAlign(CENTER);
@@ -31,6 +32,7 @@ function draw() {
     textAlign(CENTER)
     text("click here", width/2, height/2+100);  
     }
+    
     //button 
   rectMode(CENTER);
   stroke(255);

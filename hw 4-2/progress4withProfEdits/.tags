@@ -1,0 +1,5 @@
+trip.lit	/Users/michaelmusick/odrive/mm_GD/p5/empty-example copy/sketch.js	/^var trip = {$/;"	property	line:1
+setup	/Users/michaelmusick/odrive/mm_GD/p5/empty-example copy/sketch.js	/^function setup() {$/;"	function	line:15
+setup	/Users/michaelmusick/odrive/mm_GD/p5/empty-example copy/sketch.js	/^function setup() {$/;"	function	line:15
+draw	/Users/michaelmusick/odrive/mm_GD/p5/empty-example copy/sketch.js	/^function draw() {$/;"	function	line:23
+draw	/Users/michaelmusick/odrive/mm_GD/p5/empty-example copy/sketch.js	/^function draw() {$/;"	function	line:23
