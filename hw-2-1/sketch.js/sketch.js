@@ -1,6 +1,6 @@
 function setup() {
   createCanvas(1200, 750);
-  background(255,281,18);
+  background(255,0,0);
 }
 var values = (80, 80);
 function draw() {
@@ -8,8 +8,8 @@ function draw() {
   ellipseMode(CENTER);
   fill(0);
   strokeWeight(1);
-  ellipse(475, 180, values);
-  ellipse(725, 180, values);
+  ellipse(475, 180, 80);
+  ellipse(725, 180, 80);
   //eye highlights
   ellipseMode(CENTER);
   fill(256);
@@ -33,7 +33,7 @@ function draw() {
   //pikamouth
   noFill();
   strokeWeight(3);
-  curve(550, 20, 600, 275, 500, 280, 450, 45);
+  curve(550, 20, 600, 275, 500, 280, 490, 45);
   curve(650, 20, 600, 275, 700, 280, 690, 45);
   
   //ear triangles (cheeks end at 390 and 800)
