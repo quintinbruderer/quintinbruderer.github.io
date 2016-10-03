@@ -1,5 +1,4 @@
 var bulge = 0;
-mouseX = mouseX/1200;
 
 
 function setup() {
@@ -18,7 +17,7 @@ function draw() {
   
   textSize(20);
   textFont("impact");
-  var flashy =random(256);
+  var flashy =random(360);
   fill(flashy, 256, 256);
   text("I am honestly still somewhat confussed on how to make some of this work...", 20, 20);
   
