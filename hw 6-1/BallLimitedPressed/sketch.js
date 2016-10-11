@@ -16,18 +16,18 @@ function draw() {
     ballarray[i].move();
 
   }
-  if (mouseIsPressed) {
-    ballarray.push(new ColorbBall(random(1, 360), mouseX, mouseY));
-    if (ballarray.length > 60) {
-      ballarray.splice(0, 1);
-    }
-  }
+  // if (mouseIsPressed) {
+  //   ballarray.push(new ColorbBall(random(1, 360), mouseX, mouseY));
+  //   if (ballarray.length > 60) {
+  //     ballarray.splice(0, 1);
+  //   }
+  // }
 
 }
 
-// function mousePressed() {
-//   ballarray.push(new ColorbBall(random(1, 360), mouseX, mouseY));
-//   if (ballarray.length > 6) {
-//     ballarray.splice(0, 1);
-//   }
-// }
+function mousePressed() {
+  ballarray.push(new ColorbBall(random(1, 360), mouseX, mouseY));
+  if (ballarray.length > 6) {
+    ballarray.splice(0, 1);
+  }
+}
