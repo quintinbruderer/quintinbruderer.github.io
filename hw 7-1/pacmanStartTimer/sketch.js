@@ -4,8 +4,8 @@ var pacmanArray = [];
 function setup() {
   createCanvas(1200, 700);
   frameRate(30); //NTSC YO!
-  for (var i = 0; i < 2; i++) { // odd question, why is there only 2. Doesn't zero count?
-    pacmanArray[i] = new Pacman(random(0, width), random(0, height));
+  for (var i = 0; i < 5; i++) { // odd question, why is there only 2. Doesn't zero count?
+    pacmanArray[i] = new Pacman(600,300);
   }
 }
 

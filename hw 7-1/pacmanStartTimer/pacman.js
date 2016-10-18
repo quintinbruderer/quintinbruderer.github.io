@@ -1,4 +1,5 @@
-/*Quinn's to do list LOL
+/*
+Quinn's to do list LOL
 scale/rotate pacmans upon direction angle
 set canvas boundaries 
 stop runspeed if pacman distance is too close to one another. 
@@ -41,10 +42,21 @@ function Pacman(x, y) {
     push();
     noStroke();
     fill(this.r, this.g, 0);
-    arc(this.x, this.y, this.size, this.size, this.mDegR, TWO_PI - this.mDegR, PIE);
+    translate(this.x, this.y);
+    
+    if (this.direction[this.ranDirection] == "up") {
+      rotate(-HALF_PI);
+    } else if (this.direction[this.ranDirection] == "down") {
+      rotate(HALF_PI);
+    } else if (this.direction[this.ranDirection] == "left") {
+      scale(-1,1);
+    } else { //left
+      //it will normally draw this. 
+    }
+
+    arc(0, 0, this.size, this.size, this.mDegR, TWO_PI - this.mDegR, PIE);
     fill(0);
-    translate(0, -this.size / 4);
-    arc(this.x, this.y, this.size / 8, this.size / 8, PI + this.eDegR, PI - this.eDegR, PIE);
+    arc(0, -this.size / 4, this.size / 8, this.size / 8, PI + this.eDegR, PI - this.eDegR, PIE);
     pop();
   };
 
@@ -52,8 +64,12 @@ function Pacman(x, y) {
     this.mDegR = radians(this.mouthdeg); //converts mouth degree into radians for munching arc
     this.mouthdeg = this.mouthdeg + this.munchspeed; //animates mouth
     if (this.mouthdeg > 40 || this.mouthdeg <= 2) {
-      if (this.mouthdeg < 2) { this.mouthdeg = 2} //boundary condition...aka it will never get past 1 or 41
-      if(this.mouthdeg > 40) {this.mouthdeg = 40}
+      if (this.mouthdeg < 2) {
+        this.mouthdeg = 2
+      } //boundary condition...aka it will never get past 1 or 41
+      if (this.mouthdeg > 40) {
+        this.mouthdeg = 40
+      }
       this.munchspeed = this.munchspeed * -1;
     }
   };
@@ -62,13 +78,14 @@ function Pacman(x, y) {
     if (this.direction[this.ranDirection] == "up") {
       this.x = this.x;
       this.y = this.y - this.runspeed;
+      rotate()
     } else if (this.direction[this.ranDirection] == "down") {
       this.x = this.x;
       this.y = this.y + this.runspeed;
-    } else if (this.direction[this.ranDirection] == "left") {
+    } else if (this.direction[this.ranDirection] == "right") {
       this.x = this.x + this.runspeed;
       this.y = this.y;
-    } else if (this.direction[this.ranDirection] == "right") {
+    } else if (this.direction[this.ranDirection] == "left") {
       this.x = this.x - this.runspeed;
       this.y = this.y;
     }
@@ -90,7 +107,7 @@ function Pacman(x, y) {
       //this sets new direction choice to current/old choice. 
       this.ranDirection = tempdir;
 
-      this.speed = floor(random(2, 10));
+      this.speed = floor(random(10));
       this.munchspeed = this.speed;
       this.runspeed = this.speed;
     } else {
