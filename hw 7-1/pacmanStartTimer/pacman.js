@@ -43,13 +43,13 @@ function Pacman(x, y) {
     noStroke();
     fill(this.r, this.g, 0);
     translate(this.x, this.y);
-    
+
     if (this.direction[this.ranDirection] == "up") {
       rotate(-HALF_PI);
     } else if (this.direction[this.ranDirection] == "down") {
       rotate(HALF_PI);
     } else if (this.direction[this.ranDirection] == "left") {
-      scale(-1,1);
+      scale(-1, 1);
     } else { //left
       //it will normally draw this. 
     }
@@ -90,6 +90,7 @@ function Pacman(x, y) {
       this.y = this.y;
     }
     this.timer();
+    this.walledge();
   };
 
 
@@ -102,7 +103,7 @@ function Pacman(x, y) {
       this.begin = 0;
       //Do starts once, and will only repeat if previous (randirection) does not equal new (tempdir), or code "do"'s again.
       do {
-        tempdir = floor(random(0, 3));
+        tempdir = floor(random(0, 4));
       } while (tempdir == this.ranDirection); // this is the test of new direction and old/current direction. 
       //this sets new direction choice to current/old choice. 
       this.ranDirection = tempdir;
@@ -118,7 +119,29 @@ function Pacman(x, y) {
 
   };
 
-
+  this.walledge = function() {
+    var rad = (.5 * this.size);
+    if (this.y + rad >= height) {
+      this.runspeed = 0
+    }
+    if (this.y - rad <= 0) {
+      this.runspeed = 0
+    }
+    if (this.x + rad >= width) {
+      this.runspeed = 0
+    }
+    if (this.x - rad <= 0) {
+      this.runspeed = 0
+        //wall stoppers
+    }
+    //   if (this.x - rad >= width || this.x - rad <= 0) {
+    //     this.x = this.x - 1
+    //   } //boundary condition...aka it will never get past 1 or 41
+    //   if (this.y - rad >= height || this.y - rad <= 0) {
+    //     this.y = this.y - 1
+    //   }
+    // };
+  }
 }
 
 /* Quinn's testing timer
