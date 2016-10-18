@@ -1,5 +1,4 @@
 /*Quinn's to do list LOL
-Fix breaking mouth arc
 scale/rotate pacmans upon direction angle
 set canvas boundaries 
 stop runspeed if pacman distance is too close to one another. 
