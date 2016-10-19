@@ -11,6 +11,7 @@ function Pacman(x, y) {
   this.y = y;
   //pacmans' size
   this.size = 100;
+  this.rad = (.5 * this.size);
   //pacmans' different colors
   this.r = random(230, 255);
   this.g = random(200, 255);
@@ -90,7 +91,7 @@ function Pacman(x, y) {
       this.y = this.y;
     }
     this.timer();
-    this.walledge();
+    this.edgelocks();
   };
 
 
@@ -108,7 +109,7 @@ function Pacman(x, y) {
       //this sets new direction choice to current/old choice. 
       this.ranDirection = tempdir;
 
-      this.speed = floor(random(10));
+      this.speed = floor(random(15));
       this.munchspeed = this.speed;
       this.runspeed = this.speed;
     } else {
@@ -119,29 +120,37 @@ function Pacman(x, y) {
 
   };
 
-  this.walledge = function() {
-    var rad = (.5 * this.size);
-    if (this.y + rad >= height) {
+  this.edgelocks = function() {
+    if (this.y + this.rad >= height) {
       this.runspeed = 0
+      this.y = height - this.rad - 1;
     }
-    if (this.y - rad <= 0) {
+    if (this.y - this.rad <= 0) {
       this.runspeed = 0
+      this.y = 0 + this.rad + 1
     }
-    if (this.x + rad >= width) {
+    if (this.x + this.rad >= width) {
       this.runspeed = 0
+      this.x = width - this.rad - 1;
     }
-    if (this.x - rad <= 0) {
+    if (this.x - this.rad <= 0) {
       this.runspeed = 0
-        //wall stoppers
+      this.x = 0 + this.rad + 1;
+      //stops runspeed (until new direction is chosen) and the +/- 1 creates a boundary condition
+      //                            otherwise the pacmans' were locked in place once they overshot width/height/0
     }
-    //   if (this.x - rad >= width || this.x - rad <= 0) {
-    //     this.x = this.x - 1
-    //   } //boundary condition...aka it will never get past 1 or 41
-    //   if (this.y - rad >= height || this.y - rad <= 0) {
-    //     this.y = this.y - 1
-    //   }
-    // };
-  }
+  };
+  this.pacDistChecks = function(pacmanArray, thisindex) {
+    for (i = 0; i < pacmanArray.length; i++) {
+      if (thisindex != i) {
+        var distance = dist(this.x, this.y, pacmanArray[i].x, pacmanArray[i].y);
+        if (distance <= this.rad + pacmanArray[i].rad ) {
+          this.runspeed = 0;
+
+        }
+      }
+    }
+  };
 }
 
 /* Quinn's testing timer
