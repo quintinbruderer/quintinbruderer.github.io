@@ -11,15 +11,18 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(windowWidth, 100);
-  background(0);
+  noCanvas();
+  //createCanvas(windowWidth, 100);
+  //poster Image size is 185
   poster = (posterInfo.images.base_url + posterInfo.images.poster_sizes[3] + testFilm.poster_path)
-  
   var info = ["genre", "budget", "ratings", "desc"];
 
-  createImg(poster);
-  var title = createP("Film Name:" + testFilm.original_title);
+  var posterIMG = createImg(poster);
+ // posterIMG.position(((windowWidth / 2) - 185), 20);
 
+  var title = createElement('h2',"Film Name:" + testFilm.original_title);
+  
+  var filmInfo = createP("Information")
   info[0] = createP("Genre: " + testFilm.genres[0 /* or 2? */ ].name); //genre
   info[1] = createP("Budget: " + testFilm.budget);
   info[2] = createP("Ratings: " + testFilm.vote_average);
@@ -27,9 +30,9 @@ function setup() {
 
 
   for (var i = 0; i < info.length; i++) {
-    title.child(info[i]);
+    filmInfo.child(info[i]);
 
-    console.log(posterInfo);
+    console.log(poster);
   }
 
   /*
@@ -40,9 +43,4 @@ function setup() {
 
 }
 
-function draw() {
-  textSize(15);
-  fill(255);
-  text("adding canvas cause I wanna mess with html...? I'll remove it later", 10, 10);
-
-}
+function draw() {}
