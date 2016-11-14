@@ -29,5 +29,7 @@ There is also the fact that there is 2 modes in flappy bird: day and night. I ca
 There is a lot of timing going on here and button reaction stuff. I do not know if I will be able to successfully do 
 "multiple screens" perse, as I was just planning on using an HTML button to start it, but I'll figure that part out as I go. 
 
+The game plan is over is to start, by Wednesday this week to have all the graphics created and possibly a sprite sheet. Then after that, for the rest of the week I will look into seeing if there are aditional libraries needed or to research a bit about how to go about starting the coding and injecting my images in the canvas. The following weeks after, I will start to layer and build the animated background, next to get the pipe buildings moving and random heights (but a fixed distance in between so Pidgey can actually get through them) followed by the bird's movement and to clean up code. I do not yet know how long each thing should take, so my best bet is to give a week with each step, as each step will have its struggles within itself.
+
 Its slightly fun to take notes of [a game](http://flappybird.io/) while you play (and fail) at it.
 
