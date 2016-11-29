@@ -6,8 +6,8 @@ var daytime;
 var nightA;
 var title;
 
-var pidgeyStill, pidgeyFlap, pidgeyImg;
-//var pidgeyAnim, pidgeyFlap;
+//var pidgeyStill, pidgeyFlap, pidgeyImg;
+var pidgeyAnim, pidgeyFlap;
 
 var sky;
 var trees;
@@ -32,9 +32,9 @@ function preload() { //this is to load all of the asset information
   through = loadSound('assets/Through.mp3');
   wing = loadSound('assets/wing.ogg');
 
-  //pidgeyAnim = loadAnimation('assets/pidgeysheet1.png', 'assets/pidgeysheet2.png', 'assets/pidgeysheet3.png');
-  pidgeyImg = loadSpriteSheet('assets/pidgeysheet.png', 48, 45, 3);
-  pidgeyFlap = loadAnimation(pidgeyImg);
+  pidgeyAnim = loadAnimation('assets/pidgeysheet1.png', 'assets/pidgeysheet2.png', 'assets/pidgeysheet3.png');
+  //pidgeyImg = loadSpriteSheet('assets/pidgeysheet.png', 48, 45, 3);
+  //pidgeyFlap = loadAnimation(pidgeyImg);
 
 
 
@@ -78,7 +78,7 @@ function setup() {
   music.setVolume(0.05);
   music.play();
 
-  pidgeyFlap = createSprite(25, height / 2);
+  pidgeyFlap = createSprite(20, height / 2);
   pidgeyFlap.addAnimation("default", pidgeyAnim);
   
 }
@@ -129,8 +129,8 @@ function draw() {
   imageMode(CENTER);
   image(title, width / 2, height / 4);
 
-  animation (pidgeyFlap, 20, height/2);
-  // drawSprites();
+  //animation (pidgeyFlap, 20, height/2);
+   drawSprites();
 
 
 }
