@@ -6,6 +6,9 @@ var daytime;
 var nightA;
 var title;
 
+var pidgeyStill, pidgeyFlap, pidgeyImg;
+//var pidgeyAnim, pidgeyFlap;
+
 var sky;
 var trees;
 var buildings;
@@ -28,7 +31,13 @@ function preload() { //this is to load all of the asset information
   smack = loadSound('assets/Smack.mp3');
   through = loadSound('assets/Through.mp3');
   wing = loadSound('assets/wing.ogg');
-  
+
+  //pidgeyAnim = loadAnimation('assets/pidgeysheet1.png', 'assets/pidgeysheet2.png', 'assets/pidgeysheet3.png');
+  pidgeyImg = loadSpriteSheet('assets/pidgeysheet.png', 48, 45, 3);
+  pidgeyFlap = loadAnimation(pidgeyImg);
+
+
+
   //I'm going to need a "info" array to put my title image, tap image and game over image within.
   title = loadImage('assets/title.png');
 
@@ -63,21 +72,22 @@ function preload() { //this is to load all of the asset information
 
 function setup() {
   createCanvas(432, 768);
-  
-
 
   createSprite(width / 2, 200, 20, 30);
-  createSprite(40, height/2, 50, 50);
 
   music.setVolume(0.05);
   music.play();
 
+  pidgeyFlap = createSprite(25, height / 2);
+  pidgeyFlap.addAnimation("default", pidgeyAnim);
+  
 }
 
 function draw() {
+  //pidgeyFlap.frameDelay = 6;
   background(sky);
   imageMode(CORNER);
-  
+
   //this is to place the shit in the canvas
   //placeItems(sky, buildings, trees, ground, tower); //would an array work in here?
   //using my original layout image, I got coordinances to where each piece is to be placed
@@ -87,9 +97,10 @@ function draw() {
   image(trees, treeX, 423);
   image(ground, groundX, 603);
 
-  //drawSprites();
-  
-  
+
+
+
+
   fill(255);
   text(daytime, 10, 10);
   text(nightA, 10, 20);
@@ -114,9 +125,14 @@ function draw() {
       buildX = 0;
     }
   }
-  
+
   imageMode(CENTER);
-  image(title, width/2, height/4);
+  image(title, width / 2, height / 4);
+
+  animation (pidgeyFlap, 20, height/2);
+  // drawSprites();
+
+
 }
 
 function mousePressed() {
