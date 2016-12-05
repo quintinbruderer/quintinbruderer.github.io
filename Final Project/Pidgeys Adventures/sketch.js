@@ -4,10 +4,13 @@ var through;
 var wing;
 var daytime;
 var nightA;
-var title;
 
-//var pidgeyStill, pidgeyFlap, pidgeyImg;
-var pidgeyAnim, pidgeyFlap;
+var title, gameDead, tapSpace;
+
+var pidgey, pidgeyAnim, pidgeyStill;
+
+var gravity = .2;
+var flapV = -5;
 
 var sky;
 var trees;
@@ -22,6 +25,9 @@ var buildX = 0;
 
 
 
+var newGame = false;
+var gameOver = true;
+
 function preload() { //this is to load all of the asset information
   daytime = round(random(1));
   nightA = round(random(2));
@@ -32,14 +38,15 @@ function preload() { //this is to load all of the asset information
   through = loadSound('assets/Through.mp3');
   wing = loadSound('assets/wing.ogg');
 
-  pidgeyAnim = loadAnimation('assets/pidgeysheet1.png', 'assets/pidgeysheet2.png', 'assets/pidgeysheet3.png');
-  //pidgeyImg = loadSpriteSheet('assets/pidgeysheet.png', 48, 45, 3);
-  //pidgeyFlap = loadAnimation(pidgeyImg);
+  pidgeyAnim = loadAnimation('assets/pidgeysheet1.png', 'assets/pidgeysheet2.png', 'assets/pidgeysheet3.png', 'assets/pidgeysheet2.png');
+  pidgeyStill = loadAnimation('assets/pidgeysheet1.png');
 
-
-
-  //I'm going to need a "info" array to put my title image, tap image and game over image within.
   title = loadImage('assets/title.png');
+  gameDead = loadImage('assets/gameOv.png');
+  tapSpace = loadImage('assets/tap.png');
+  scoreTab = loadImage('assets/score.png');
+
+
 
   //depending on what daytime info is given, will dictate what specific assets load
   if (daytime == 1) {
@@ -72,15 +79,18 @@ function preload() { //this is to load all of the asset information
 
 function setup() {
   createCanvas(432, 768);
-
-  createSprite(width / 2, 200, 20, 30);
+  //createSprite(width / 2, 200, 20, 30);
 
   music.setVolume(0.05);
   music.play();
 
-  pidgeyFlap = createSprite(20, height / 2);
-  pidgeyFlap.addAnimation("default", pidgeyAnim);
-  
+  pidgey = createSprite(95, height / 2);
+
+  // pidgey.rotateToDirection = true; I need to see how I could get this to slow down. 
+  // was unable to use this  ^ due to sudden stuff, as now I have a variable to change it in draw.
+  pidgey.addAnimation("still", pidgeyStill);
+  pidgey.addAnimation("flapping", pidgeyAnim);
+
 }
 
 function draw() {
@@ -97,15 +107,13 @@ function draw() {
   image(trees, treeX, 423);
   image(ground, groundX, 603);
 
-
-
-
-
   fill(255);
+
   text(daytime, 10, 10);
   text(nightA, 10, 20);
 
-  groundX = groundX - 2;
+
+  //groundX = groundX - 2;
   //the math of 96 is the width of Ground: 528 subtract the width of the background/canvas: 432 = 96
   //I made the sprites so they would tile, thus although jumping back LOOKS like a long movement
   if (groundX <= -96) {
@@ -126,16 +134,85 @@ function draw() {
     }
   }
 
-  imageMode(CENTER);
-  image(title, width / 2, height / 4);
+  if (gameOver) {
+    if (keyWentDown(" ")) {
+      startGame();
 
-  //animation (pidgeyFlap, 20, height/2);
-   drawSprites();
+    }
+    if (!newGame) {
+      imageMode(CENTER);
+      image(title, width / 2, height / 5);
+      //title.remove();
+      image(tapSpace, width / 2, height / 3);
+    } else {
+      imageMode(CENTER);
+      image(gameDead, width / 2, height / 5);
+      image(tapSpace, width / 2, height / 3);
+    }
+  }
+
+  if (!gameOver && newGame) {
+    groundX = groundX - 2;
+    pidgey.velocity.y += gravity;
+    // originally this if statement was in key went down but couldn't get it to work as I thought it was just
+    //..always thinking velocity was less than zero, but outside next to gravity it works great.
+
+    if (keyWentDown(" ")) {
+      wing.setVolume(0.1);
+      wing.play();
+      pidgey.velocity.y = flapV;
+    }
 
 
+    if (pidgey.position.y - pidgey.height / 2 < 0) {
+      pidgey.position.y = 0 + pidgey.height / 2;
+    }
+
+    var pidgRot = 6
+    if (pidgey.velocity.y > 0) {
+      pidgey.changeAnimation("still");
+      pidgey.rotation = pidgey.rotation + pidgRot;
+      if (pidgey.rotation > 65) {
+        pidgey.rotation = 65;
+      }
+    } else {
+      pidgey.changeAnimation("flapping");
+      pidgey.rotation = pidgey.rotation - (2 * pidgRot);
+      if (pidgey.rotation < -35) {
+        pidgey.rotation = -35;
+      }
+    }
+
+    if (pidgey.position.y + pidgey.height / 2 > 603) { //603 being the ground height
+      pidgeyDeath();
+      pidgey.position.y = 603 - pidgey.height / 2;
+    }
+  }
+  drawSprites();
 }
 
 function mousePressed() {
-  wing.setVolume(0.1);
-  wing.play();
+  if (gameOver) {
+    startGame();
+    pidgey.velocity.y = flapV;
+  } else {
+    wing.setVolume(0.1);
+    wing.play();
+    pidgey.velocity.y = flapV;
+  }
+}
+
+function startGame() {
+  newGame = true;
+  gameOver = false;
+  updateSprites(true);
+  pidgey.position.x = 95;
+  pidgey.position.y = height / 2;
+  pidgey.velocity.y = 0;
+}
+
+function pidgeyDeath() {
+  updateSprites(false);
+  gameOver = true;
+  groundX = groundX
 }
