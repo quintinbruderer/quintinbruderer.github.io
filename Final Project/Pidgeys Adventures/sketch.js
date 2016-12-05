@@ -83,6 +83,10 @@ function setup() {
 
   music.setVolume(0.05);
   music.play();
+  music.loop();
+  //if (daytime == 1) {
+  // music.loop();
+  // }
 
   pidgey = createSprite(95, height / 2);
 
@@ -90,6 +94,8 @@ function setup() {
   // was unable to use this  ^ due to sudden stuff, as now I have a variable to change it in draw.
   pidgey.addAnimation("still", pidgeyStill);
   pidgey.addAnimation("flapping", pidgeyAnim);
+
+  pipes = new Group();
 
 }
 
@@ -105,7 +111,6 @@ function draw() {
   //...image was stuck.
   image(buildings, buildX, 272);
   image(trees, treeX, 423);
-  image(ground, groundX, 603);
 
   fill(255);
 
@@ -116,6 +121,7 @@ function draw() {
   //groundX = groundX - 2;
   //the math of 96 is the width of Ground: 528 subtract the width of the background/canvas: 432 = 96
   //I made the sprites so they would tile, thus although jumping back LOOKS like a long movement
+  var groundSpeed = -4
   if (groundX <= -96) {
     groundX = 0
   }
@@ -139,20 +145,19 @@ function draw() {
       startGame();
 
     }
+    imageMode(CENTER);
     if (!newGame) {
-      imageMode(CENTER);
       image(title, width / 2, height / 5);
       //title.remove();
       image(tapSpace, width / 2, height / 3);
     } else {
-      imageMode(CENTER);
-      image(gameDead, width / 2, height / 5);
-      image(tapSpace, width / 2, height / 3);
+      image(gameDead, width / 2, 65);
+      //image(tapSpace, width / 2, height / 3);
     }
   }
 
   if (!gameOver && newGame) {
-    groundX = groundX - 2;
+    groundX = groundX + groundSpeed; //No Pipes? Make groundspeed a - and a + negative number is equivalent to -
     pidgey.velocity.y += gravity;
     // originally this if statement was in key went down but couldn't get it to work as I thought it was just
     //..always thinking velocity was less than zero, but outside next to gravity it works great.
@@ -183,12 +188,32 @@ function draw() {
       }
     }
 
+    if (frameCount % 90 == 0) { //every 1.5 seconds. 1 second is 2 quick, 2 seconds is too slow
+      var pipeStart = round(random(0, 100));
+      var pipeH = map(pipeStart, 0, 100, 350, 603);
+      //added the map function to add some "flappy bird cuss words toughness"
+      var pipe = createSprite(84 + width, pipeH, 84, 498);
+      // 84 is the width of pipe. Without that the pipe spawns too late.
+      pipe.addImage(tower)
+      pipe.velocity.x = groundSpeed;
+      pipes.add(pipe);
+    }
+
+
+
+
+
     if (pidgey.position.y + pidgey.height / 2 > 603) { //603 being the ground height
       pidgeyDeath();
       pidgey.position.y = 603 - pidgey.height / 2;
     }
   }
   drawSprites();
+
+  imageMode(CORNER);
+  image(ground, groundX, 603);
+  //ground was originally drawn with trees and backing, but sprites were covering, so I had to cover the sprite of 
+  //the buildings with the ground, thus its placement down here.
 }
 
 function mousePressed() {
@@ -209,10 +234,21 @@ function startGame() {
   pidgey.position.x = 95;
   pidgey.position.y = height / 2;
   pidgey.velocity.y = 0;
+  pipes.removeSprites();
 }
 
 function pidgeyDeath() {
-  updateSprites(false);
-  gameOver = true;
+  for (var i = 0; i < pipes.length; i++)
+    pipes[i].velocity.x = 0
+    //updateSprites(false);
+    // gameOver = true;
   groundX = groundX
+  fallOfDeath();
+}
+
+function fallOfDeath() {
+  if (pidgey.position.y + pidgey.height / 2 > 603) {
+    updateSprites(false);
+    gameOver = true;
+  }
 }
