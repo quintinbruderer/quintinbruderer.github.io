@@ -243,12 +243,13 @@ function pidgeyDeath() {
     //updateSprites(false);
     // gameOver = true;
   groundX = groundX
+  gameOver = true;
   fallOfDeath();
 }
 
 function fallOfDeath() {
   if (pidgey.position.y + pidgey.height / 2 > 603) {
     updateSprites(false);
-    gameOver = true;
+    
   }
 }
