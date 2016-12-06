@@ -44,7 +44,7 @@ function preload() { //this is to load all of the asset information
   wing = loadSound('assets/wing.ogg');
 
   scoreB = loadImage('assets/score.png');
-  //myFont = loadFont('assets/pokefont.ttf');
+  myFont = loadFont("assets/Pokefont.ttf");
 
   pidgeyAnim = loadAnimation('assets/pidgeysheet1.png', 'assets/pidgeysheet2.png', 'assets/pidgeysheet3.png', 'assets/pidgeysheet2.png');
   pidgeyStill = loadAnimation('assets/pidgeysheet1.png');
@@ -97,7 +97,7 @@ function setup() {
   // }
 
   pidgey = createSprite(95, height / 2, 48, 45);
-  pidgey.setCollider("circle", 0, 0, 10);
+  pidgey.setCollider("circle", 0, 0, 15);
   // pidgey.rotateToDirection = true; I need to see how I could get this to slow down. 
   // was unable to use this  ^ due to sudden stuff, as now I have a variable to change it in draw.
   pidgey.addAnimation("still", pidgeyStill);
@@ -224,12 +224,12 @@ function draw() {
     }
 
     for (var i = 0; i < pipeCenterz.length; i++) {
-      if (pipeCenterz[i].position.x < -84) {
+      if (pidgey.overlap(pipeCenterz)) {
+        score = score + 1
+        through.setVolume(0.2);
+        through.play();
         pipeCenterz[i].remove();
       }
-      // if (pidgey.position.x == pipeCenterz[i].position.x) {
-      //   score = score + 1
-      // }
     }
 
     for (var i = 0; i < pipes.length; i++) {
@@ -247,13 +247,6 @@ function draw() {
       pidgeyDeath();
       pidgey.position.y = 608 - pidgey.height / 2;
     }
-
-    if (pidgey.overlap(pipeCenterz)) { //small colliders make this work, but need to figure how to get points by 1 each 
-    //                                    even with a larger collider
-      score = score + 1
-      through.setVolume(0.2);
-      through.play();
-    }
   }
   drawSprites(pipes);
   //drawSprites(pipeCenterz);
@@ -267,12 +260,12 @@ function draw() {
   image(scoreB, 0, 30);
   push();
   fill(77, 62, 23);
-  textAlign(CENTER);
-  textSize(24);
-  textFont("Verdana")
-  //textFont(myFont)
-  //text(score, 95, 63);
-  text(score,95,61);
+  textAlign(CENTER,BASELINE);
+  textSize(17);
+  //textFont("Verdana")
+  textFont(myFont)
+  text(score, 96, 60);
+  //text(score, 95, 61);
   pop();
   if (gameOver && newGame) {
     imageMode(CENTER);
