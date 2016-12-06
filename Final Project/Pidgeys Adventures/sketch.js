@@ -44,7 +44,7 @@ function preload() { //this is to load all of the asset information
   wing = loadSound('assets/wing.ogg');
 
   scoreB = loadImage('assets/score.png');
-  myFont = loadFont('assets/pokefont.ttf');
+  //myFont = loadFont('assets/pokefont.ttf');
 
   pidgeyAnim = loadAnimation('assets/pidgeysheet1.png', 'assets/pidgeysheet2.png', 'assets/pidgeysheet3.png', 'assets/pidgeysheet2.png');
   pidgeyStill = loadAnimation('assets/pidgeysheet1.png');
@@ -269,8 +269,10 @@ function draw() {
   fill(77, 62, 23);
   textAlign(CENTER);
   textSize(24);
-  textFont(myFont)
-  text(score, 95, 63);
+  textFont("Verdana")
+  //textFont(myFont)
+  //text(score, 95, 63);
+  text(score,95,61);
   pop();
   if (gameOver && newGame) {
     imageMode(CENTER);
