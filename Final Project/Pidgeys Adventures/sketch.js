@@ -97,7 +97,7 @@ function setup() {
   // }
 
   pidgey = createSprite(95, height / 2, 48, 45);
-  pidgey.setCollider("circle", 0, 0, 2);
+  pidgey.setCollider("circle", 0, 0, 10);
   // pidgey.rotateToDirection = true; I need to see how I could get this to slow down. 
   // was unable to use this  ^ due to sudden stuff, as now I have a variable to change it in draw.
   pidgey.addAnimation("still", pidgeyStill);
