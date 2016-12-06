@@ -11,13 +11,17 @@ var pidgey, pidgeyAnim, pidgeyStill;
 
 var gravity = .2;
 var flapV = -5;
+var score = 0
+var myFont;
 
 var sky;
 var trees;
 var buildings;
 var ground;
-var pipebird;
-var tower;
+var scoreB;
+
+var pipebird, pipebirdTwo;
+var pipes;
 
 var groundX = 0;
 var treeX = 0;
@@ -34,9 +38,13 @@ function preload() { //this is to load all of the asset information
 
   // assets that will always be used
   pipebird = loadImage('assets/pipeB.png');
+  pipebirdTwo = loadImage('assets/pipeB2.png');
   smack = loadSound('assets/Smack.mp3');
   through = loadSound('assets/Through.mp3');
   wing = loadSound('assets/wing.ogg');
+
+  scoreB = loadImage('assets/score.png');
+  myFont = loadFont('assets/pokefont.ttf');
 
   pidgeyAnim = loadAnimation('assets/pidgeysheet1.png', 'assets/pidgeysheet2.png', 'assets/pidgeysheet3.png', 'assets/pidgeysheet2.png');
   pidgeyStill = loadAnimation('assets/pidgeysheet1.png');
@@ -81,21 +89,22 @@ function setup() {
   createCanvas(432, 768);
   //createSprite(width / 2, 200, 20, 30);
 
-  music.setVolume(0.05);
+  music.setVolume(0.2);
   music.play();
   music.loop();
   //if (daytime == 1) {
   // music.loop();
   // }
 
-  pidgey = createSprite(95, height / 2);
-
+  pidgey = createSprite(95, height / 2, 48, 45);
+  pidgey.setCollider("circle", 0, 0, 2);
   // pidgey.rotateToDirection = true; I need to see how I could get this to slow down. 
   // was unable to use this  ^ due to sudden stuff, as now I have a variable to change it in draw.
   pidgey.addAnimation("still", pidgeyStill);
   pidgey.addAnimation("flapping", pidgeyAnim);
 
   pipes = new Group();
+  pipeCenterz = new Group();
 
 }
 
@@ -114,8 +123,8 @@ function draw() {
 
   fill(255);
 
-  text(daytime, 10, 10);
-  text(nightA, 10, 20);
+  //text(daytime, 10, 10);
+  //text(nightA, 10, 20);
 
 
   //groundX = groundX - 2;
@@ -143,16 +152,12 @@ function draw() {
   if (gameOver) {
     if (keyWentDown(" ")) {
       startGame();
-
     }
     imageMode(CENTER);
     if (!newGame) {
       image(title, width / 2, height / 5);
       //title.remove();
       image(tapSpace, width / 2, height / 3);
-    } else {
-      image(gameDead, width / 2, 65);
-      //image(tapSpace, width / 2, height / 3);
     }
   }
 
@@ -163,7 +168,7 @@ function draw() {
     //..always thinking velocity was less than zero, but outside next to gravity it works great.
 
     if (keyWentDown(" ")) {
-      wing.setVolume(0.1);
+      wing.setVolume(0.3);
       wing.play();
       pidgey.velocity.y = flapV;
     }
@@ -188,32 +193,91 @@ function draw() {
       }
     }
 
+    var pipeGap = 90;
     if (frameCount % 90 == 0) { //every 1.5 seconds. 1 second is 2 quick, 2 seconds is too slow
       var pipeStart = round(random(0, 100));
-      var pipeH = map(pipeStart, 0, 100, 350, 603);
+      var pipeH = map(pipeStart, 0, 100, 420, 603);
       //added the map function to add some "flappy bird cuss words toughness"
       var pipe = createSprite(84 + width, pipeH, 84, 498);
+      pipe.setCollider("rectangle", 0, 0, 84, 498);
       // 84 is the width of pipe. Without that the pipe spawns too late.
       pipe.addImage(tower)
       pipe.velocity.x = groundSpeed;
       pipes.add(pipe);
+
+      //if (pipeH < 550) {
+      // pipeH = 80 - (height-pipeH + pipeGap); 
+      //nearly breaking down to use the example, I removed the above, and started fidding with just the bottom code.
+      //and somehow magically...I got it
+      pipe = createSprite(84 + width, pipeH - (525 + pipeGap), 84, pipeH + pipeGap);
+      pipe.setCollider("rectangle", 0, 0, 84, 525);
+      pipe.addAnimation("default", pipebird, pipebirdTwo);
+      //pipe.addImage(pipebird);
+      pipe.velocity.x = groundSpeed;
+      pipes.add(pipe);
+      //}
+
+      var center = createSprite(84 + width, pipeH - 300, 1, pipeGap);
+      center.setCollider("rectangle", 0, 0, 1, pipeGap);
+      center.velocity.x = groundSpeed;
+      pipeCenterz.add(center);
+    }
+
+    for (var i = 0; i < pipeCenterz.length; i++) {
+      if (pipeCenterz[i].position.x < -84) {
+        pipeCenterz[i].remove();
+      }
+      // if (pidgey.position.x == pipeCenterz[i].position.x) {
+      //   score = score + 1
+      // }
+    }
+
+    for (var i = 0; i < pipes.length; i++) {
+      if (pipes[i].position.x < -84) {
+        pipes[i].remove();
+      }
     }
 
 
-
-
-
-    if (pidgey.position.y + pidgey.height / 2 > 603) { //603 being the ground height
+    if (pidgey.overlap(pipes)) {
       pidgeyDeath();
-      pidgey.position.y = 603 - pidgey.height / 2;
+    }
+
+    if (pidgey.position.y + pidgey.height / 2 > 608) { //603 being the ground height, add some pixels for "coverage"
+      pidgeyDeath();
+      pidgey.position.y = 608 - pidgey.height / 2;
+    }
+
+    if (pidgey.overlap(pipeCenterz)) { //small colliders make this work, but need to figure how to get points by 1 each 
+    //                                    even with a larger collider
+      score = score + 1
+      through.setVolume(0.2);
+      through.play();
     }
   }
-  drawSprites();
+  drawSprites(pipes);
+  //drawSprites(pipeCenterz);
 
   imageMode(CORNER);
   image(ground, groundX, 603);
   //ground was originally drawn with trees and backing, but sprites were covering, so I had to cover the sprite of 
   //the buildings with the ground, thus its placement down here.
+
+  drawSprite(pidgey);
+  image(scoreB, 0, 30);
+  push();
+  fill(77, 62, 23);
+  textAlign(CENTER);
+  textSize(24);
+  textFont(myFont)
+  text(score, 95, 63);
+  pop();
+  if (gameOver && newGame) {
+    imageMode(CENTER);
+    image(gameDead, width / 2, height / 5);
+    image(tapSpace, width / 2, height / 3);
+  }
+
 }
 
 function mousePressed() {
@@ -221,7 +285,7 @@ function mousePressed() {
     startGame();
     pidgey.velocity.y = flapV;
   } else {
-    wing.setVolume(0.1);
+    wing.setVolume(0.3);
     wing.play();
     pidgey.velocity.y = flapV;
   }
@@ -230,26 +294,27 @@ function mousePressed() {
 function startGame() {
   newGame = true;
   gameOver = false;
+  score = 0;
   updateSprites(true);
   pidgey.position.x = 95;
   pidgey.position.y = height / 2;
   pidgey.velocity.y = 0;
   pipes.removeSprites();
+  pipeCenterz.removeSprites();
 }
 
 function pidgeyDeath() {
-  for (var i = 0; i < pipes.length; i++)
+  for (var i = 0; i < pipes.length; i++) {
     pipes[i].velocity.x = 0
-    //updateSprites(false);
-    // gameOver = true;
+  }
+  through.stop();
+  smack.setVolume(0.3);
+  smack.play();
+  //updateSprites(false);
+  // gameOver = true;
   groundX = groundX
   gameOver = true;
-  fallOfDeath();
-}
 
-function fallOfDeath() {
-  if (pidgey.position.y + pidgey.height / 2 > 603) {
-    updateSprites(false);
-    
-  }
+  death = true;
+  updateSprites(false);
 }
