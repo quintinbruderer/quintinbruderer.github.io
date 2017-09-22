@@ -1,1 +1,3 @@
-# quintinbruderer.github.io
+# Creative Coding 1
+## Media Arts
+## University Of Montana
